@@ -58,6 +58,6 @@ from ex1 import encrypt, freq_dist_attack
 def test_freq_dist_attack(texto_original, chave_correta):
     cifra = encrypt(texto_original, chave_correta)
 
-    attempts = freq_dist_attack(cifra)
+    attempts = freq_dist_attack(cifra, testing=True)
 
     assert texto_original in attempts

@@ -50,7 +50,7 @@ def brute_force_attack(cipher_text: str) -> int:
 
 
 @timer
-def freq_dist_attack(cipher_text: str) -> None:
+def freq_dist_attack(cipher_text: str, testing: bool=False):
     cipher_text = cipher_text.lower()
     alphabet_lenght = 26
     freq = {}
@@ -78,9 +78,12 @@ def freq_dist_attack(cipher_text: str) -> None:
         print(f"{ind}. Tentativa: {attempt}")
         attempts.append(attempt)
         ind += 1
-    resp = int(input("Qual tentativa foi a correta? "))
-    print(f"A chave é {best_guesses[resp-1]}!")
-    print("É a cifra de César!") if best_guesses[resp-1]==3 else None
+    if not testing:
+        resp = int(input("Qual tentativa foi a correta? "))
+        print(f"A chave é {best_guesses[resp-1]}!")
+        print("É a cifra de César!") if best_guesses[resp-1]==3 else None
+        return best_guesses[resp-1]
+
     return attempts
 
 
@@ -97,4 +100,4 @@ def teste():
     freq_dist_attack("chchylxdcheud") #zezeviuazebra
 
 
-teste()
+# teste()
