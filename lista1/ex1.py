@@ -51,6 +51,7 @@ def brute_force_attack(cipher_text: str) -> int:
 
 def freq_dist_attack(cipher_text: str) -> None:
     cipher_text = cipher_text.lower()
+    alphabet_lenght = 26
     freq = {}
     for char in cipher_text:
         if freq.get(char):
@@ -65,7 +66,9 @@ def freq_dist_attack(cipher_text: str) -> None:
     best_guesses = []
     for i in range(3):
         for j in range(3):
-            best_guesses.append((ord(sorted_freq[i][0]) - ord(sorted_portuguese_freq[j][0]))%26)
+            guess = (ord(sorted_freq[i][0]) - ord(sorted_portuguese_freq[j][0]))%alphabet_lenght
+            if guess not in best_guesses:
+                best_guesses.append(guess)
 
     ind = 1
     attempts = []
@@ -84,7 +87,8 @@ def freq_dist_attack(cipher_text: str) -> None:
 def teste():
     # print(encrypt("ola tudo bem zzz", 3))
     # print(decrypt("rod wxgr ehp ccc", 3))
-    # brute_force_attack("rodwxgrehpccc")
+    key = brute_force_attack("rodwxgrehp")
+    print(key)
     # freq_dist_attack("irprvghvfrehuwrvvhhvfrqgdphvdoyhpvh") # fomosdescobertosseescondamesalvemse 
     # freq_dist_attack("txdqgrvxujhrdoylyhughlpsrqhqwhqrjudpdgrhptxhdoxwdrdjxdugdvdehehprtxhyhpshodiuhqwhtxhdgxuhcdgrsuholrqdrwdugd") # quandosurgeoalviverdeimponentenogramadoemquealutaoaguardasabebemoquevempelafrentequeadurezadoprelionaotarda
     # freq_dist_attack("doxqrvyhuliltxhpdvqrwdvgdvsurydvghyrfhv") # alunosverifiquemasnotasdasprovasdevoces
