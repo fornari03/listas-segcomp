@@ -1,3 +1,4 @@
+from utils import timer
 
 portuguese_frequencies = {
     'a': 13.9, 'b': 1.0, 'c': 4.4, 'd': 5.4, 'e': 12.2,
@@ -21,7 +22,6 @@ def encrypt(msg: str, key: int) -> str:
     return cipher_text
 
 
-
 def decrypt(cipher_text: str, key: int) -> str:
     alphabet_upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     alphabet_lower = "abcdefghijklmnopqrstuvwxyz"
@@ -38,7 +38,7 @@ def decrypt(cipher_text: str, key: int) -> str:
 
 
 
-
+@timer
 def brute_force_attack(cipher_text: str) -> int:
     for i in range(26):
         attempt = decrypt(cipher_text, i)
@@ -49,6 +49,7 @@ def brute_force_attack(cipher_text: str) -> int:
     return resp-1
 
 
+@timer
 def freq_dist_attack(cipher_text: str) -> None:
     cipher_text = cipher_text.lower()
     alphabet_lenght = 26
@@ -87,12 +88,13 @@ def freq_dist_attack(cipher_text: str) -> None:
 def teste():
     # print(encrypt("ola tudo bem zzz", 3))
     # print(decrypt("rod wxgr ehp ccc", 3))
-    key = brute_force_attack("rodwxgrehp")
-    print(key)
+    # key = brute_force_attack("rodwxgrehp")
+    # print(key)
     # freq_dist_attack("irprvghvfrehuwrvvhhvfrqgdphvdoyhpvh") # fomosdescobertosseescondamesalvemse 
     # freq_dist_attack("txdqgrvxujhrdoylyhughlpsrqhqwhqrjudpdgrhptxhdoxwdrdjxdugdvdehehprtxhyhpshodiuhqwhtxhdgxuhcdgrsuholrqdrwdugd") # quandosurgeoalviverdeimponentenogramadoemquealutaoaguardasabebemoquevempelafrentequeadurezadoprelionaotarda
     # freq_dist_attack("doxqrvyhuliltxhpdvqrwdvgdvsurydvghyrfhv") # alunosverifiquemasnotasdasprovasdevoces
-    freq_dist_attack("rodwxgrehp") # olatudobem
+    # freq_dist_attack("rodwxgrehp") # olatudobem
+    freq_dist_attack("chchylxdcheud") #zezeviuazebra
 
 
 teste()
