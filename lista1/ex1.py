@@ -1,6 +1,6 @@
 from utils import timer
 
-portuguese_frequencies = {
+chars_freq = {
     'a': 13.9, 'b': 1.0, 'c': 4.4, 'd': 5.4, 'e': 12.2,
     'f': 1.0, 'g': 1.2, 'h': 0.8, 'i': 6.9, 'j': 0.4,
     'k': 0.1, 'l': 2.8, 'm': 4.2, 'n': 5.3, 'o': 10.8,
@@ -63,7 +63,7 @@ def freq_dist_attack(cipher_text: str, testing: bool=False):
     freq_dist = {char: (count / total) * 100 for char, count in freq.items()}
     sorted_freq = sorted(freq_dist.items(), key=lambda x: x[1], reverse=True)
     print(sorted_freq)
-    sorted_portuguese_freq = sorted(portuguese_frequencies.items(), key=lambda x: x[1], reverse=True)
+    sorted_portuguese_freq = sorted(chars_freq.items(), key=lambda x: x[1], reverse=True)
     best_guesses = []
     for i in range(3):
         for j in range(3):
