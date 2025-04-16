@@ -1,3 +1,6 @@
+# ARQUIVO PARA EXERCICIO 1
+# QUEBRANDO SHIFT CIPHER
+
 from utils import timer
 
 chars_freq = {
@@ -39,14 +42,17 @@ def decrypt(cipher_text: str, key: int) -> str:
 
 
 @timer
-def brute_force_attack(cipher_text: str) -> int:
+def brute_force_attack(cipher_text: str, testing: bool=False) -> int:
     for i in range(26):
         attempt = decrypt(cipher_text, i)
         print(f"{i+1}. {attempt}")
-    resp = int(input("Qual tentativa foi a correta? "))
-    print(f"A chave é {resp-1}!")
-    print("É a cifra de César!") if resp==4 else None
-    return resp-1
+    
+    if not testing:
+        resp = int(input("Qual tentativa foi a correta? "))
+        print(f"A chave é {resp-1}!")
+        print("É a cifra de César!") if resp==4 else None
+        return resp-1
+    return 0
 
 
 @timer
@@ -87,17 +93,39 @@ def freq_dist_attack(cipher_text: str, testing: bool=False):
     return attempts
 
 
+# TESTES
 
-def teste():
-    # print(encrypt("ola tudo bem zzz", 3))
-    # print(decrypt("rod wxgr ehp ccc", 3))
-    # key = brute_force_attack("rodwxgrehp")
-    # print(key)
-    # freq_dist_attack("irprvghvfrehuwrvvhhvfrqgdphvdoyhpvh") # fomosdescobertosseescondamesalvemse 
-    # freq_dist_attack("txdqgrvxujhrdoylyhughlpsrqhqwhqrjudpdgrhptxhdoxwdrdjxdugdvdehehprtxhyhpshodiuhqwhtxhdgxuhcdgrsuholrqdrwdugd") # quandosurgeoalviverdeimponentenogramadoemquealutaoaguardasabebemoquevempelafrentequeadurezadoprelionaotarda
-    # freq_dist_attack("doxqrvyhuliltxhpdvqrwdvgdvsurydvghyrfhv") # alunosverifiquemasnotasdasprovasdevoces
-    # freq_dist_attack("rodwxgrehp") # olatudobem
-    freq_dist_attack("chchylxdcheud") #zezeviuazebra
+# Testes de encriptação e decriptação
+
+# Exemplo 1
+msg = "meunomeeguilherme"
+key = 1
+cipher_text = encrypt(msg, key)
+print(f"Encriptando \"{msg}\" com chave {key}: {cipher_text}")
+
+print(f"Decriptando \"{cipher_text}\" com chave {key}: {decrypt(cipher_text, key)}")
+
+# Exemplo 2
+msg = "zezeviuazebra"
+key = 3
+cipher_text = encrypt(msg, key)
+print(f"Encriptando \"{msg}\" com chave {key}: {cipher_text}")
+
+print(f"Decriptando \"{cipher_text}\" com chave {key}: {decrypt(cipher_text, key)}")
 
 
-# teste()
+# Testes de brute force
+
+# Exemplo 1
+key = brute_force_attack("rodwxgrehp") # olatudobem
+print(key)
+
+# Exemplo 2
+
+
+# Testes de frequência
+
+# freq_dist_attack("irprvghvfrehuwrvvhhvfrqgdphvdoyhpvh") # fomosdescobertosseescondamesalvemse 
+# freq_dist_attack("txdqgrvxujhrdoylyhughlpsrqhqwhqrjudpdgrhptxhdoxwdrdjxdugdvdehehprtxhyhpshodiuhqwhtxhdgxuhcdgrsuholrqdrwdugd") # quandosurgeoalviverdeimponentenogramadoemquealutaoaguardasabebemoquevempelafrentequeadurezadoprelionaotarda
+# freq_dist_attack("doxqrvyhuliltxhpdvqrwdvgdvsurydvghyrfhv") # alunosverifiquemasnotasdasprovasdevoces
+#print("zezeviuazebra" in freq_dist_attack("chchylxdcheud", testing=True)) #zezeviuazebra

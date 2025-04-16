@@ -124,10 +124,55 @@ def freq_dist_attack(cipher_text: str, testing: bool=False) -> list:
 
     return best_guesses
 
-def teste():
-    C = encrypt("fujametranquemtodasasportasdeusestaconosco", "123456789012345")
-    print(C)
-    print(decrypt(C, "salvemse"))
-    freq_dist_attack(C)
+@timer
+def freq_dist_attack2(cipher_text: str, testing: bool=False) -> list:
+    cipher_text = cipher_text.lower()
+    alphabet_lenght = 26
+    sorted_freq = sorted(digraph_freq.items(), key=lambda x: x[1], reverse=True)
+    sorted_most_freq = [x for (x,y) in sorted_freq[0:56]] # pega os 10 mais frequentes
+    print(sorted_most_freq)
 
-#teste()
+    best_guesses = {}
+    text_len = len(cipher_text)
+
+    for digraph in sorted_most_freq:
+        first, second = digraph[0], digraph[1]
+        for i in range(text_len):
+            if cipher_text[i] == first:
+                # circularmente procura a próxima ocorrência do segundo caractere do dígrafo
+                for j in range(1, text_len):  # de 1 a n-1
+                    next_index = (i + j) % text_len
+                    if cipher_text[next_index] == second:
+                        if j not in best_guesses:
+                            best_guesses[j] = 1
+                        else:
+                            best_guesses[j] += 1
+                        break  # achou, sai desse loop interno
+
+    ind = 1
+    for guess in best_guesses:
+        attempt = decrypt(cipher_text, "a"*guess)
+        print(f"{ind}. Tentativa: {attempt}")
+        ind += 1
+    if not testing:
+        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        resp = int(input("Qual tentativa foi a correta? "))
+        print(f"A chave é uma palavra de tamanho {best_guesses[resp-1]}!")
+        return best_guesses[resp-1]
+
+    return [x for (x,y) in sorted(best_guesses.items(), key=lambda x: x[1], reverse=True) if y > text_len/20]
+
+
+
+def teste():
+    C = encrypt("fujametranquemtodasasportasdeusestaconosco", "adeus")
+    print(C)
+    print(decrypt(C, "adeus"))
+    print(freq_dist_attack(C, testing=True))
+
+    C = encrypt("anoticiaeumformatodedivulgacaodeumacontecimentopormeiosjornalisticoseamateriaprimadojornalismonormalmentereconhecidacomoalgumdadooueventosocialmenterelevantequemerecepublicacaoemummeiodecomunicacaosocialfatospoliticossociaiseconomicosculturaisnaturaiseoutrospodemsernoticiaseafetaremindividuosougrupossignificativosparaumdeterminadoveiculodeimprensaanoticiapodeserdefinidacomoumprodutosocialmenteconstruidopoiseresultadodasposicoessociaisdeindividuosegruposenvolvidoscomaproducaojornalisticaepelaspropriasfontesqueatuamcomodefinidoresprimariosdoseventosanoticiaeumacondensacaodessesdeterminantesemumprodutosocioculturalessencialnaconstrucaodosprocessosconteudoserelacoessociais", "aaaaaa")
+    print(C)
+    print(decrypt(C, "aaaaaa"))
+    print(freq_dist_attack(C, testing=True))
+
+teste()
