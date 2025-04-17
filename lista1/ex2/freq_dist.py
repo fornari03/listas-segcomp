@@ -1,5 +1,5 @@
-import random
-from utils import timer
+from ..utils import timer
+from .enc_dec import decrypt
 
 digraph_freq = {
     "aa": 5.13, "ab": 2.35, "ac": 10.05, "ad": 14.80, "ae": 4.49, "af": 2.27, "ag": 2.14, "ah": 0.48, "ai": 5.11, "aj": 0.57, "ak": 0.09, "al": 9.03, "am": 8.08, "an": 11.62, "ao": 11.84, "ap": 5.84, "aq": 1.85, "ar": 14.89, "as": 16.41, "at": 5.01, "au": 2.26, "av": 3.04, "aw": 0.04, "ax": 0.15, "ay": 0.08, "az": 0.84,
@@ -29,63 +29,6 @@ digraph_freq = {
     "ya": 0.06, "yb": 0.01, "yc": 0.02, "yd": 0.02, "ye": 0.05, "yf": 0.01, "yg": 0.00, "yh": 0.00, "yi": 0.01, "yj": 0.00, "yk": 0.00, "yl": 0.02, "ym": 0.02, "yn": 0.02, "yo": 0.05, "yp": 0.01, "yq": 0.00, "yr": 0.01, "ys": 0.03, "yt": 0.01, "yu": 0.01, "yv": 0.00, "yw": 0.01, "yx": 0.00, "yy": 0.00, "yz": 0.00,
     "za": 1.20, "zb": 0.01, "zc": 0.05, "zd": 0.15, "ze": 0.86, "zf": 0.02, "zg": 0.00, "zh": 0.01, "zi": 0.29, "zj": 0.01, "zk": 0.00, "zl": 0.01, "zm": 0.08, "zn": 0.05, "zo": 0.33, "zp": 0.07, "zq": 0.08, "zr": 0.02, "zs": 0.05, "zt": 0.02, "zu": 0.06, "zv": 0.01, "zw": 0.00, "zx": 0.00, "zy": 0.00, "zz": 0.02
 }
-
-
-def encrypt(msg: str, key: str) -> str:
-    key = len(key)
-    alphabet = "abcdefghijklmnopqrstuvwxyz"
-    cipher_list = []
-    cipher_text = ""
-    i = 0
-    while i < len(msg):
-        if len(msg) - i >= key:
-            cipher_list.append(msg[i:i + key])
-        else:
-            cipher_list.append(msg[i:])
-            while len(cipher_list[-1]) < key:
-                cipher_list[-1] += random.choice(alphabet)
-        i += key
-
-    print(cipher_list)
-        
-    for i in range(key):
-        for j in range(len(cipher_list)):
-            if i < len(cipher_list[j]):
-                cipher_text += cipher_list[j][i]
-
-    return cipher_text
-
-
-
-def decrypt(cipher_text: str, key: str) -> str:
-    key = len(key)
-    msg = ""
-    jump = len(cipher_text) // key
-    i = 0
-    while len(msg) < len(cipher_text):
-        msg += cipher_text[i]
-        i += jump
-        if i >= len(cipher_text):
-            i = i % len(cipher_text) + 1
-    
-    return msg
-
-
-
-
-@timer
-def brute_force_attack(cipher_text: str, testing: bool=False) -> int:
-    # testa todas as possibilidades de tamanho de senha até o tamanho do texto
-    key_attempt = "a"
-    while len(key_attempt) < len(cipher_text):
-        attempt = decrypt(cipher_text, key_attempt)
-        print(f"{len(key_attempt)}. {attempt}")
-        key_attempt += "a"
-    if not testing:
-        resp = int(input("Qual tentativa foi a correta? "))
-        print(f"A chave é uma palavra de {resp} caracteres!")
-    
-    return resp
 
 
 @timer
@@ -124,6 +67,8 @@ def freq_dist_attack(cipher_text: str, testing: bool=False) -> list:
 
     return best_guesses
 
+
+
 @timer
 def freq_dist_attack2(cipher_text: str, testing: bool=False) -> list:
     cipher_text = cipher_text.lower()
@@ -161,18 +106,3 @@ def freq_dist_attack2(cipher_text: str, testing: bool=False) -> list:
         return best_guesses[resp-1]
 
     return [x for (x,y) in sorted(best_guesses.items(), key=lambda x: x[1], reverse=True) if y > text_len/20]
-
-
-
-def teste():
-    C = encrypt("fujametranquemtodasasportasdeusestaconosco", "adeus")
-    print(C)
-    print(decrypt(C, "adeus"))
-    print(freq_dist_attack(C, testing=True))
-
-    C = encrypt("anoticiaeumformatodedivulgacaodeumacontecimentopormeiosjornalisticoseamateriaprimadojornalismonormalmentereconhecidacomoalgumdadooueventosocialmenterelevantequemerecepublicacaoemummeiodecomunicacaosocialfatospoliticossociaiseconomicosculturaisnaturaiseoutrospodemsernoticiaseafetaremindividuosougrupossignificativosparaumdeterminadoveiculodeimprensaanoticiapodeserdefinidacomoumprodutosocialmenteconstruidopoiseresultadodasposicoessociaisdeindividuosegruposenvolvidoscomaproducaojornalisticaepelaspropriasfontesqueatuamcomodefinidoresprimariosdoseventosanoticiaeumacondensacaodessesdeterminantesemumprodutosocioculturalessencialnaconstrucaodosprocessosconteudoserelacoessociais", "aaaaaa")
-    print(C)
-    print(decrypt(C, "aaaaaa"))
-    print(freq_dist_attack(C, testing=True))
-
-teste()

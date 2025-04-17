@@ -1,7 +1,5 @@
-# ARQUIVO PARA EXERCICIO 1
-# QUEBRANDO SHIFT CIPHER
-
-from utils import timer
+from ..utils import timer
+from .enc_dec import decrypt
 
 chars_freq = {
     'a': 13.9, 'b': 1.0, 'c': 4.4, 'd': 5.4, 'e': 12.2,
@@ -10,49 +8,6 @@ chars_freq = {
     'p': 2.9, 'q': 0.9, 'r': 6.9, 's': 7.9, 't': 4.9,
     'u': 4.0, 'v': 1.3, 'w': 0.0, 'x': 0.3, 'y': 0.0, 'z': 0.4
 }
-
-def encrypt(msg: str, key: int) -> str:
-    alphabet_upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    alphabet_lower = "abcdefghijklmnopqrstuvwxyz"
-    alphabet_lenght = 26
-    cipher_text = ""
-    for m in msg:
-        if m in alphabet_lower:
-            cipher_text += alphabet_lower[(alphabet_lower.find(m)+key)%alphabet_lenght]
-        elif m in alphabet_upper:
-            cipher_text += alphabet_upper[(alphabet_upper.find(m)+key)%alphabet_lenght]
-
-    return cipher_text
-
-
-def decrypt(cipher_text: str, key: int) -> str:
-    alphabet_upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    alphabet_lower = "abcdefghijklmnopqrstuvwxyz"
-    alphabet_lenght = 26
-    msg = ""
-    for c in cipher_text:
-        if c in alphabet_lower:
-            msg += alphabet_lower[(alphabet_lower.find(c)-key)%alphabet_lenght]
-        elif c in alphabet_upper:
-            msg += alphabet_upper[(alphabet_upper.find(c)-key)%alphabet_lenght]
-
-    return msg
-
-
-
-
-@timer
-def brute_force_attack(cipher_text: str, testing: bool=False) -> int:
-    for i in range(26):
-        attempt = decrypt(cipher_text, i)
-        print(f"{i+1}. {attempt}")
-    
-    if not testing:
-        resp = int(input("Qual tentativa foi a correta? "))
-        print(f"A chave é {resp-1}!")
-        print("É a cifra de César!") if resp==4 else None
-        return resp-1
-    return 0
 
 
 @timer
@@ -92,8 +47,6 @@ def freq_dist_attack(cipher_text: str, testing: bool=False):
 
     return attempts
 
-
-# TESTES
 
 # Testes de encriptação e decriptação
 
