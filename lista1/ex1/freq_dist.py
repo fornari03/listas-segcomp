@@ -1,5 +1,5 @@
-from ..utils import timer
-from .enc_dec import decrypt
+from utils import timer
+from enc_dec import decrypt
 
 chars_freq = {
     'a': 13.9, 'b': 1.0, 'c': 4.4, 'd': 5.4, 'e': 12.2,
@@ -86,6 +86,3 @@ def freq_dist_attack(cipher_text: str, testing: bool=False):
 # # Exemplo 2
 # # Esse exemplo usa o argumento testing=True para calcular o tempo de execução corretamente
 # freq_dist_attack("pajcdhktgxuxfjtbphcdiphsphegdkphstkdrth", testing=True) # alunosverifiquemasnotasdasprovasdevoces
-
-key = freq_dist_attack("rodwxgrehp")
-print(key)

@@ -1,5 +1,5 @@
-from ..utils import timer
-from .enc_dec import decrypt
+from utils import timer
+from enc_dec import decrypt
 
 
 @timer
