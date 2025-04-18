@@ -1,5 +1,5 @@
-from ..utils import timer
-from .enc_dec import decrypt
+from utils import timer
+from enc_dec import decrypt
 
 digraph_freq = {
     "aa": 5.13, "ab": 2.35, "ac": 10.05, "ad": 14.80, "ae": 4.49, "af": 2.27, "ag": 2.14, "ah": 0.48, "ai": 5.11, "aj": 0.57, "ak": 0.09, "al": 9.03, "am": 8.08, "an": 11.62, "ao": 11.84, "ap": 5.84, "aq": 1.85, "ar": 14.89, "as": 16.41, "at": 5.01, "au": 2.26, "av": 3.04, "aw": 0.04, "ax": 0.15, "ay": 0.08, "az": 0.84,
@@ -34,75 +34,33 @@ digraph_freq = {
 @timer
 def freq_dist_attack(cipher_text: str, testing: bool=False) -> list:
     cipher_text = cipher_text.lower()
-    alphabet_lenght = 26
-    sorted_freq = sorted(digraph_freq.items(), key=lambda x: x[1], reverse=True)
-    sorted_most_freq = [x for (x,y) in sorted_freq[0:56]] # pega os 10 mais frequentes
-    print(sorted_most_freq)
-
-    best_guesses = []
-    text_len = len(cipher_text)
-
-    for digraph in sorted_most_freq:
-        first, second = digraph[0], digraph[1]
-        for i in range(text_len):
-            if cipher_text[i] == first:
-                # circularmente procura a próxima ocorrência do segundo caractere do dígrafo
-                for j in range(1, text_len):  # de 1 a n-1
-                    next_index = (i + j) % text_len
-                    if cipher_text[next_index] == second:
-                        if j not in best_guesses:
-                            best_guesses.append(j)
-                        break  # achou, sai desse loop interno
-
-    ind = 1
-    for guess in best_guesses:
-        attempt = decrypt(cipher_text, "a"*guess)
-        print(f"{ind}. Tentativa: {attempt}")
-        ind += 1
-    if not testing:
-        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        resp = int(input("Qual tentativa foi a correta? "))
-        print(f"A chave é uma palavra de tamanho {best_guesses[resp-1]}!")
-        return best_guesses[resp-1]
-
-    return best_guesses
-
-
-
-@timer
-def freq_dist_attack2(cipher_text: str, testing: bool=False) -> list:
-    cipher_text = cipher_text.lower()
-    alphabet_lenght = 26
-    sorted_freq = sorted(digraph_freq.items(), key=lambda x: x[1], reverse=True)
-    sorted_most_freq = [x for (x,y) in sorted_freq[0:56]] # pega os 10 mais frequentes
-    print(sorted_most_freq)
 
     best_guesses = {}
     text_len = len(cipher_text)
+    dividers = [i for i in range(1, text_len+1) if text_len % i == 0]  # divisores do tamanho do texto
+    print(f"Divisores do tamanho do texto: {dividers}")
 
-    for digraph in sorted_most_freq:
-        first, second = digraph[0], digraph[1]
-        for i in range(text_len):
-            if cipher_text[i] == first:
-                # circularmente procura a próxima ocorrência do segundo caractere do dígrafo
-                for j in range(1, text_len):  # de 1 a n-1
-                    next_index = (i + j) % text_len
-                    if cipher_text[next_index] == second:
-                        if j not in best_guesses:
-                            best_guesses[j] = 1
-                        else:
-                            best_guesses[j] += 1
-                        break  # achou, sai desse loop interno
+    for i in range(text_len):
+        for j in dividers:
+            if j != i:
+                digraph = cipher_text[i] + cipher_text[(i + j) % text_len]
+                if digraph in digraph_freq:
+                    if (text_len // j) not in best_guesses:
+                        best_guesses[text_len // j] = digraph_freq[digraph]
+                    else:
+                        best_guesses[text_len // j] += digraph_freq[digraph]
+
+    five_best = sorted(best_guesses.items(), key=lambda x: x[1], reverse=True)[0:2]
+    print(five_best)
 
     ind = 1
-    for guess in best_guesses:
-        attempt = decrypt(cipher_text, "a"*guess)
-        print(f"{ind}. Tentativa: {attempt}")
+    for guess in five_best:
+        attempt = decrypt(cipher_text, "a"*guess[0])
+        print(f"{ind}. Tentativa: {attempt} / {guess}")
         ind += 1
     if not testing:
-        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         resp = int(input("Qual tentativa foi a correta? "))
-        print(f"A chave é uma palavra de tamanho {best_guesses[resp-1]}!")
-        return best_guesses[resp-1]
+        print(f"A chave é uma palavra de tamanho {five_best[resp-1][0]}!")
+        return five_best[resp-1]
 
-    return [x for (x,y) in sorted(best_guesses.items(), key=lambda x: x[1], reverse=True) if y > text_len/20]
+    return [x[0] for x in five_best]

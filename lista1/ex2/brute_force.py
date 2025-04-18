@@ -1,13 +1,18 @@
+from utils import timer
+from enc_dec import decrypt
+
 @timer
 def brute_force_attack(cipher_text: str, testing: bool=False) -> int:
-    # testa todas as possibilidades de tamanho de senha até o tamanho do texto
-    key_attempt = "a"
-    while len(key_attempt) < len(cipher_text):
-        attempt = decrypt(cipher_text, key_attempt)
-        print(f"{len(key_attempt)}. {attempt}")
-        key_attempt += "a"
+    text_len = len(cipher_text)
+    # testa todos os divisores do tamanho do texto, já que o tamanho da chave é um divisor
+    key_attempts = [i for i in range(1, text_len+1) if text_len % i == 0]
+    ind = 1
+    for attempt in key_attempts:
+        attempt = decrypt(cipher_text, "a"*attempt)
+        print(f"{ind}. {attempt}")
+        ind += 1
     if not testing:
         resp = int(input("Qual tentativa foi a correta? "))
-        print(f"A chave é uma palavra de {resp} caracteres!")
+        print(f"A chave é uma palavra de {key_attempts[resp-1]} caracteres!")
     
     return resp
