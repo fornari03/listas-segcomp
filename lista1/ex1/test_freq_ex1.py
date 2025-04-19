@@ -1,5 +1,6 @@
 import pytest
-from lista1.ex1.freq_dist import encrypt, freq_dist_attack
+from enc_dec import encrypt
+from freq_dist import freq_dist_attack
 
 @pytest.mark.parametrize("texto_original, chave_correta", [
     ("viajarparapraiasdocalor", 4),

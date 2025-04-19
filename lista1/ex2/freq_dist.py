@@ -50,17 +50,16 @@ def freq_dist_attack(cipher_text: str, testing: bool=False) -> list:
                     else:
                         best_guesses[text_len // j] += digraph_freq[digraph]
 
-    five_best = sorted(best_guesses.items(), key=lambda x: x[1], reverse=True)[0:2]
-    print(five_best)
+    two_best = sorted(best_guesses.items(), key=lambda x: x[1], reverse=True)[0:2]
 
     ind = 1
-    for guess in five_best:
+    for guess in two_best:
         attempt = decrypt(cipher_text, "a"*guess[0])
         print(f"{ind}. Tentativa: {attempt} / {guess}")
         ind += 1
     if not testing:
         resp = int(input("Qual tentativa foi a correta? "))
-        print(f"A chave é uma palavra de tamanho {five_best[resp-1][0]}!")
-        return five_best[resp-1]
+        print(f"A chave é uma palavra de tamanho {two_best[resp-1][0]}!")
+        return two_best[resp-1]
 
-    return [x[0] for x in five_best]
+    return [x[0] for x in two_best]
