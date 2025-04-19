@@ -66,7 +66,7 @@ def menu():
         print("11. Criar novo exemplo de teste de frequência")
         print("12. Criar novo exemplo de teste de frequência (testing=True)")
 
-        print("\nQualquer outro número significa fechar o programa.")
+        print("Qualquer outro número significa fechar o programa.\n")
         ex = input("Qual dos exemplos você quer rodar? ")
         if ex == "1":
             enc_dec_1()

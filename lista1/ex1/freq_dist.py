@@ -14,7 +14,7 @@ chars_freq = {
 def freq_dist_attack(cipher_text: str, testing: bool=False):
     cipher_text = cipher_text.lower()
     alphabet_lenght = 26
-    freq = {}
+    freq = {} # frequência dos caracteres
     for char in cipher_text:
         if freq.get(char):
             freq[char] += 1
@@ -24,10 +24,11 @@ def freq_dist_attack(cipher_text: str, testing: bool=False):
     freq_dist = {char: (count / total) * 100 for char, count in freq.items()}
     sorted_freq = sorted(freq_dist.items(), key=lambda x: x[1], reverse=True)
     print(f"\nFrequência dos caracteres no texto cifrado:\n{sorted_freq}\n")
+    # ordena a lista de frequência em português para pegar o A, E, O
     sorted_portuguese_freq = sorted(chars_freq.items(), key=lambda x: x[1], reverse=True)
     best_guesses = []
-    for i in range(3):
-        for j in range(3):
+    for i in range(3): # 3 mais frequentes do texto cifrado
+        for j in range(3): # 3 mais frequentes do português
             guess = (ord(sorted_freq[i][0]) - ord(sorted_portuguese_freq[j][0]))%alphabet_lenght
             if guess not in best_guesses:
                 best_guesses.append(guess)
@@ -46,43 +47,3 @@ def freq_dist_attack(cipher_text: str, testing: bool=False):
         return best_guesses[resp-1]
 
     return attempts
-
-
-# Testes de encriptação e decriptação
-
-# Exemplo 1
-# msg = "meunomeeguilherme"
-# key = 1
-# cipher_text = encrypt(msg, key)
-# print(f"\nEncriptando \"{msg}\" com chave {key}: {cipher_text}\n")
-
-# print(f"\nDecriptando \"{cipher_text}\" com chave {key}: {decrypt(cipher_text, key)}\n")
-
-# # Exemplo 2
-# msg = "zezeviuazebra"
-# key = 3
-# cipher_text = encrypt(msg, key)
-# print(f"\nEncriptando \"{msg}\" com chave {key}: {cipher_text}\n")
-
-# print(f"\nDecriptando \"{cipher_text}\" com chave {key}: {decrypt(cipher_text, key)}\n")
-
-
-# # Testes de brute force
-
-# # Exemplo 1
-# key = brute_force_attack("chchylxdcheud") # zezeviuazebra
-# print(f"{key}\n")
-
-# # Exemplo 2
-# # Esse exemplo usa o argumento testing=True para calcular o tempo de execução corretamente
-# brute_force_attack("pajcdhktgxuxfjtbphcdiphsphegdkphstkdrth", testing=True) # alunosverifiquemasnotasdasprovasdevoces
-
-# # Testes de frequência
-
-# # Exemplo 1
-# key = freq_dist_attack("chchylxdcheud") # zezeviuazebra
-# print(f"{key}\n")
-
-# # Exemplo 2
-# # Esse exemplo usa o argumento testing=True para calcular o tempo de execução corretamente
-# freq_dist_attack("pajcdhktgxuxfjtbphcdiphsphegdkphstkdrth", testing=True) # alunosverifiquemasnotasdasprovasdevoces

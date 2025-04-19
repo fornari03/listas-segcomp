@@ -14,5 +14,6 @@ def brute_force_attack(cipher_text: str, testing: bool=False) -> int:
     if not testing:
         resp = int(input("Qual tentativa foi a correta? "))
         print(f"A chave é uma palavra de {key_attempts[resp-1]} caracteres!")
-    
-    return resp
+        return key_attempts[resp-1]
+
+    return 0

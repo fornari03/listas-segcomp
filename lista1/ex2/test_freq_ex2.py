@@ -74,4 +74,5 @@ def test_freq_dist_attack(texto_original, chave_correta):
 
     attempts = freq_dist_attack(cifra, testing=True)
 
+    # verifica se o tamanho da chave correta está entre as tentativas
     assert len(chave_correta) in attempts

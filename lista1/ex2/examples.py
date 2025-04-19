@@ -9,45 +9,45 @@ from freq_dist import freq_dist_attack
 # Exemplo 1
 def enc_dec_1():
     msg = "meunomeeguilherme"
-    key = 1
+    key = "nome"
     cipher_text = encrypt(msg, key)
     print(f"\nEncriptando \"{msg}\" com chave {key}: {cipher_text}\n")
 
-    print(f"\nDecriptando \"{cipher_text}\" com chave {key}: {decrypt(cipher_text, key)}\n")
+    print(f"\nDecriptando \"{cipher_text}\" com chave de tamanho {key}: {decrypt(cipher_text, key)}\n")
 
 # Exemplo 2
 def enc_dec_2():
     msg = "olatudobem"
-    key = 3
+    key = "oi"
     cipher_text = encrypt(msg, key)
     print(f"\nEncriptando \"{msg}\" com chave {key}: {cipher_text}\n")
 
-    print(f"\nDecriptando \"{cipher_text}\" com chave {key}: {decrypt(cipher_text, key)}\n")
+    print(f"\nDecriptando \"{cipher_text}\" com chave de tamanho {key}: {decrypt(cipher_text, key)}\n")
 
 
 # Exemplos de brute force
 
 # Exemplo 1
 def brute_force_1():
-    key = brute_force_attack("chchylxdcheud") # zezeviuazebra
+    key = brute_force_attack("eoaeaieouulismnrspmrsshl") # eusoupalmeirassimsenhor
     print(f"{key}\n")
 
 # Exemplo 2
 # Esse exemplo usa o argumento testing=True para calcular o tempo de execução corretamente
 def brute_force_2():
-    brute_force_attack("pajcdhktgxuxfjtbphcdiphsphegdkphstkdrth", testing=True) # alunosverifiquemasnotasdasprovasdevoces
+    brute_force_attack("nimseaoacroqirlsuseheeeve", testing=True) # naoseioquemaisescrever
 
 # Testes de frequência
 
 # Exemplo 1
 def freq_dist_1():
-    key = freq_dist_attack("chchylxdcheud") # zezeviuazebra
+    key = freq_dist_attack("eoaeaieouulismnrspmrsshl") # eusoupalmeirassimsenhor
     print(f"{key}\n")
 
 # Exemplo 2
 # Esse exemplo usa o argumento testing=True para calcular o tempo de execução corretamente
 def freq_dist_2():
-    freq_dist_attack("pajcdhktgxuxfjtbphcdiphsphegdkphstkdrth", testing=True) # alunosverifiquemasnotasdasprovasdevoces
+    freq_dist_attack("nimseaoacroqirlsuseheeeve", testing=True) # naoseioquemaisescrever
 
 
 
@@ -66,7 +66,7 @@ def menu():
         print("11. Criar novo exemplo de teste de frequência")
         print("12. Criar novo exemplo de teste de frequência (testing=True)")
 
-        print("\nQualquer outro número significa fechar o programa.")
+        print("Qualquer outro número significa fechar o programa.\n")
         ex = input("Qual dos exemplos você quer rodar? ")
         if ex == "1":
             enc_dec_1()
@@ -82,12 +82,12 @@ def menu():
             freq_dist_2()
         elif ex == "7":
             msg = input("Digite a mensagem que você quer encriptar: ")
-            key = int(input("Digite a chave: "))
+            key = input("Digite a chave: ")
             cipher_text = encrypt(msg, key)
             print(f"\nEncriptando \"{msg}\" com chave {key}: {cipher_text}\n")
         elif ex == "8":
             cipher_text = input("Digite a mensagem que você quer decriptar: ")
-            key = int(input("Digite a chave: "))
+            key = input("Digite a chave: ")
             print(f"\nDecriptando \"{cipher_text}\" com chave {key}: {decrypt(cipher_text, key)}\n")
         elif ex == "9":
             cipher_text = input("Digite a mensagem que você quer quebrar: ")
@@ -106,3 +106,5 @@ def menu():
         else:
             print("Fechando o programa.")
             break
+
+menu()

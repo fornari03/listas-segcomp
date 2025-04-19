@@ -37,29 +37,34 @@ def freq_dist_attack(cipher_text: str, testing: bool=False) -> list:
 
     best_guesses = {}
     text_len = len(cipher_text)
-    dividers = [i for i in range(1, text_len+1) if text_len % i == 0]  # divisores do tamanho do texto
+    # divisores do tamanho do texto
+    dividers = [i for i in range(1, text_len+1) if text_len % i == 0]
     print(f"Divisores do tamanho do texto: {dividers}")
 
     for i in range(text_len):
         for j in dividers:
             if j != i:
+                # monta o dígrafo
                 digraph = cipher_text[i] + cipher_text[(i + j) % text_len]
                 if digraph in digraph_freq:
+                    # soma a frequência do dígrafo à chave no dicionário
                     if (text_len // j) not in best_guesses:
                         best_guesses[text_len // j] = digraph_freq[digraph]
                     else:
                         best_guesses[text_len // j] += digraph_freq[digraph]
 
+    # pega os dois melhores candidatos
     two_best = sorted(best_guesses.items(), key=lambda x: x[1], reverse=True)[0:2]
+    print(f"Melhores candidatos: {two_best}")
 
     ind = 1
     for guess in two_best:
         attempt = decrypt(cipher_text, "a"*guess[0])
-        print(f"{ind}. Tentativa: {attempt} / {guess}")
+        print(f"{ind}. Tentativa: {attempt}")
         ind += 1
     if not testing:
         resp = int(input("Qual tentativa foi a correta? "))
         print(f"A chave é uma palavra de tamanho {two_best[resp-1][0]}!")
-        return two_best[resp-1]
+        return two_best[resp-1][0]
 
     return [x[0] for x in two_best]
